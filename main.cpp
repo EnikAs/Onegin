@@ -1,26 +1,47 @@
-#include "functions.h"
+#include "funcs.h"
 
-int main()
+int main(int argc, char* argv[])
 {
-    FILE* file_stream = fopen ("text1.txt", "r"); // Аргументы командной строки чтобы можно было подать текст
-    //freopen("textout.txt", "w", stdout);
+    int check = check_input (argv, argc);
+    if (check == INP_FILE_ERR)
+    {
+        printf ("Input file address Error");
+        return 0;
+    }
+    if (check == OUTP_FILE_ERR)
+    {
+        printf ("Output file address Error");
+        return 0;
+    }
+    FILE* file_stream = fopen (argv[1], "r");
+
     if (file_stream == NULL)
     {
         printf("File stream error!");
         return 0;
     }
-
+    //freopen(argv[2], "w", stdout);
     int correct_check = DEFAULT;
     size_t buffer_size = scanf_file_size(file_stream);
-    char* buffer = (char*) calloc(buffer_size + 1, sizeof(char));
-    if (buffer == NULL)   //wrapper
+
+    char* buffer = buffer_init (buffer_size);
+    if (buffer == NULL)
     {
-        printf ("Buffer memory error!");
-        return 0;
+        printf("Buffer memory Error");
     }
 
-    int string_counter = read_buffer(file_stream, buffer, &buffer_size);
-    Onegin* lines = (Onegin*) calloc(string_counter, sizeof(Onegin));
+    int buffer_string_counter = read_buffer(file_stream, buffer, &buffer_size);
+    if (buffer_string_counter == INCORRECT)
+    {
+        printf ("Incorrect buffer read");
+        return 0;
+    }
+    Onegin* lines = struct_Onegin_init (buffer_string_counter);
+    if (lines == NULL)
+    {
+        printf("Struct Onegin memory error");
+        return 0;
+    }
 
     int string_number = 0;
     int buff_char_number = 0;
@@ -34,6 +55,7 @@ int main()
     printf_all_strings (lines, &string_number);
 
     printf_first_variant (&buff_char_number, buffer, buffer_size);
+
 
     fclose(file_stream);
 
