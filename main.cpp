@@ -13,21 +13,23 @@ int main(int argc, char* argv[])
         printf ("Output file address Error");
         return 0;
     }
-    FILE* file_stream = fopen (argv[1], "r");
 
+    FILE* file_stream = fopen (argv[1], "r");
     if (file_stream == NULL)
     {
         printf("File stream error!");
         return 0;
     }
-    //freopen(argv[2], "w", stdout);
+    freopen(argv[2], "w", stdout);
     int correct_check = DEFAULT;
-    size_t buffer_size = scanf_file_size(file_stream);
+    size_t buffer_size = scanf_file_size(file_stream);// ftell, long long >> size_t
 
     char* buffer = buffer_init (buffer_size);
     if (buffer == NULL)
     {
         printf("Buffer memory Error");
+        return 0;//return 0 - завершилось без ошибок, можно возвращать коды ошибок
+                  //на гитхабе сделать файл с кодами ошибок и значениями
     }
 
     int buffer_string_counter = read_buffer(file_stream, buffer, &buffer_size);

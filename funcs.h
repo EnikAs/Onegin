@@ -44,6 +44,16 @@ enum for_letter_check
     LETTER
 };
 
+struct buffer
+{
+    char* buffer;
+    int buff_char_number;
+    int string_number;
+    size_t buff_size;
+};
+
+struct buffer buf;
+
 struct Onegin
 {
     char* str;
